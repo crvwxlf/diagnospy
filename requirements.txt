@@ -1,0 +1,2 @@
+pyfiglet==0.8.post1
+termcolor2==0.0.3
