@@ -64,7 +64,7 @@ def main():
         try:
             askquit = input(c('\nEnter 1 for exit\nEnter 0 or Enter for continue\nExit Diagnospy ? : ').cyan)
             askquit = int(askquit)
-        except SyntaxError:
+        except (SyntaxError, ValueError):
             print(c('\nReturning to main menu').green)
             time.sleep(0.5)
             os.system('clear')
