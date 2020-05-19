@@ -60,7 +60,27 @@ def main():
         print(c("\nhostname IP :").yellow + hip)
         print(c("\nExternal IP : ").yellow + c("Coming soon...").red.blink)
     elif opt == 3:
-        save_report()
+        file_name = datetime.datetime.date(datetime.datetime.now())  # Generate actual date
+        file_name = str(file_name)  # Converting date to string format
+        file_name = file_name + ".txt"  # add .txt suffix to file name
+        with open(file_name, "w+") as file:  # Creating file and write all data and close it
+            file.write(
+                "Hostname : "
+                + host_n
+                + "\nArch : "
+                + arch
+                + "\nOS Name : "
+                + os_name
+                + "\nOS Version : "
+                + os_ver
+                + "\nInternal IP : "
+                + iip
+                + "\nHostname IP "
+                + hip
+                + "\nExternal IP : N\A"
+            )
+        # Returning path of report file
+        print(c("\nyour file as been saved in : ").yellow + cwd + "/" + file_name)
         try:
             askquit = input(
                 c(
@@ -95,31 +115,6 @@ def main():
 
     while opt != 99:
         main()
-
-
-def save_report():
-    file_name = datetime.datetime.date(datetime.datetime.now())  # Generate actual date
-    file_name = str(file_name)  # Converting date to string format
-    file_name = file_name + ".txt"  # add .txt suffix to file name
-    with open(file_name, "w+") as file:  # Creating file and write all data and close it
-        file.write(
-            "Hostname : "
-            + host_n
-            + "\nArch : "
-            + arch
-            + "\nOS Name : "
-            + os_name
-            + "\nOS Version : "
-            + os_ver
-            + "\nInternal IP : "
-            + iip
-            + "\nHostname IP "
-            + hip
-            + "\nExternal IP : N\A"
-        )
-    # Returning path of report file
-    print(c("\nyour file as been saved in : ").yellow + cwd + "/" + file_name)
-    return 0
 
 
 # Launching menu and main function
