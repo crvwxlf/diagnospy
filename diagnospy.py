@@ -5,7 +5,9 @@ __version__ = " 1.0"
 
 import sys
 import os
+import platform
 import socket
+import distro
 import time
 import datetime
 from pyfiglet import figlet_format
@@ -22,12 +24,17 @@ def menu():
 def main():
     while True:
         # All Vars for main function
-        host_n = os.popen("uname -n").read()
-        arch = os.popen("uname -m").read()
-        os_name = os.popen("uname -s").read()
-        os_ver = os.popen("uname -v").read()
-        iip = os.popen("hostname -I").read()
-        hip = socket.gethostbyname(socket.gethostname())
+        host_n = platform.node()
+        c_arch = platform.architecture()[0]
+        os_name = sys.platform
+        os_ver = distro.linux_distribution()[0]
+        iipr = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            iipr.connect(("8.8.8.8", 80))
+        except OSError:
+            iip = c("Not available").red
+        else:
+            iip = str(iipr.getsockname()[0])
         cwd = os.getcwd()
 
         # Choice menu
@@ -43,32 +50,25 @@ def main():
             sys.exit(0)
         elif opt == "1":
             print(c("\nHostname : ").yellow + host_n)
-            print(c("\nPlatform architecture : ").yellow + arch)
+            print(c("\nCore arch : ").yellow + c_arch)
             print(c("\nOS Name : ").yellow + os_name)
             print(c("\nOS Version : ").yellow + os_ver)
         elif opt == "2":
             print(c("\nInternal IP : ").yellow + iip)
-            print(c("\nhostname IP :").yellow + hip)
-            print(c("\nExternal IP : ").yellow + c("Coming soon...").red.blink)
+            print(c("\nExternal IP : ").yellow + c("Coming soon...").red)
         elif opt == "3":
             file_name = datetime.datetime.date(datetime.datetime.now())  # Generate actual date
             file_name = str(file_name)  # Converting date to string format
             file_name = file_name + ".txt"  # add .txt suffix to file name
             with open(file_name, "w+") as file:  # Creating file and write all data and close it
                 file.write(
-                    "Hostname : "
-                    + host_n
-                    + "\nArch : "
-                    + arch
-                    + "\nOS Name : "
-                    + os_name
-                    + "\nOS Version : "
-                    + os_ver
-                    + "\nInternal IP : "
-                    + iip
-                    + "\nHostname IP "
-                    + hip
-                    + "\nExternal IP : N\\A"
+                    "Hostname : %s \
+                    \nCore arch : %s \
+                    \nOS Name : %s \
+                    \nOS Version : %s \
+                    \nInternal IP : %s \
+                    \nExternal IP : N\\A\n"
+                    % (host_n, c_arch, os_name, os_ver, iip)
                 )
             # Returning path of report file
             print(c("\nyour file as been saved in : ").yellow + cwd + "/" + file_name)

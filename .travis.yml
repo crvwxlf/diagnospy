@@ -1,6 +1,10 @@
 language: python
+
+os:
+  - linux
+  - windows
+
 python:
-  - "2.7"
   - "3.4"
   - "3.5"
   - "3.6"
@@ -11,4 +15,5 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python diagnospy.py
+  - python3 diagnospy.py
+  - ./diagnospy.py
