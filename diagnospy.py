@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 __author__ = "Kwalix"
-__version__ = "1.2.6"
+__version__ = "1.3.6"
 
 import sys
 import os
