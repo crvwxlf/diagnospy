@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
-__author__ = " Kwalix"
-__version__ = " 1.2.6"
+__author__ = "Kwalix"
+__version__ = "1.2.6"
 
 import sys
 import os
@@ -10,15 +10,21 @@ import socket
 import distro
 import time
 import datetime
-from pyfiglet import figlet_format
-from termcolor2 import c
+from requests import get
 
 
 def menu():
-    os.system("clear")
-    print(c(figlet_format("Diagnospy")).red)
-    print(c("Author :").white.on_blue + c(__author__).white)
-    print(c("Versions:").white.on_red + __version__)
+    os.system('clear' if os.name == 'posix' else 'cls')
+    print("""
+     ____  _                                         
+    |  _ \(_) __ _  __ _ _ __   ___  ___ _ __  _   _ 
+    | | | | |/ _` |/ _` | '_ \ / _ \/ __| '_ \| | | |
+    | |_| | | (_| | (_| | | | | (_) \__ \ |_) | |_| |
+    |____/|_|\__,_|\__, |_| |_|\___/|___/ .__/ \__, |
+                   |___/                |_|    |___/ 
+    By : {0} 
+    Ver : {1}
+    """.format(__author__, __version__))
 
 
 def main():
@@ -29,33 +35,35 @@ def main():
         os_name = sys.platform
         os_ver = distro.linux_distribution()[0]
         iipr = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        eip = get('https://api.ipify.org').text
+
         try:
             iipr.connect(("8.8.8.8", 80))
         except OSError:
-            iip = c("Not available").red
+            iip = "Not available"
         else:
             iip = str(iipr.getsockname()[0])
         cwd = os.getcwd()
 
         # Choice menu
-        print(c("\n1: Hardware Information").yellow)
-        print(c("\n2: Network info").yellow)
-        print(c("\n3: Create and save diagnostic report in a txt file").yellow)
-        print(c("\n99: Quit").yellow)
+        print("\n1: Hardware Information")
+        print("\n2: Network info")
+        print("\n3: Create and save diagnostic report in a txt file")
+        print("\n99: Quit")
 
-        opt = input(c("\nChoose mode >>> ").cyan)
+        opt = input("\nChoose mode >>> ")
 
         if opt == "99":
-            print(c("\nExiting program...").green)
+            print("\nExiting program...")
             sys.exit(0)
         elif opt == "1":
-            print(c("\nHostname : ").yellow + host_n)
-            print(c("\nCore arch : ").yellow + c_arch)
-            print(c("\nOS Name : ").yellow + os_name)
-            print(c("\nOS Version : ").yellow + os_ver)
+            print("\nHostname : " + host_n)
+            print("\nCore arch : " + c_arch)
+            print("\nOS Name : " + os_name)
+            print("\nOS Version : " + os_ver)
         elif opt == "2":
-            print(c("\nInternal IP : ").yellow + iip)
-            print(c("\nExternal IP : ").yellow + c("Coming soon...").red)
+            print("\nInternal IP : " + iip)
+            print("\nExternal IP : " + eip)
         elif opt == "3":
             file_name = datetime.datetime.date(datetime.datetime.now())  # Generate actual date
             file_name = str(file_name)  # Converting date to string format
@@ -67,21 +75,21 @@ def main():
                     \nOS Name : %s \
                     \nOS Version : %s \
                     \nInternal IP : %s \
-                    \nExternal IP : N\\A\n"
-                    % (host_n, c_arch, os_name, os_ver, iip)
+                    \nExternal IP : %s \n"
+                    % (host_n, c_arch, os_name, os_ver, iip, eip)
                 )
             # Returning path of report file
-            print(c("\nyour file as been saved in : ").yellow + cwd + "/" + file_name)
+            print("\nyour file as been saved in : " + cwd + "/" + file_name)
             while True:
                 a_quit = input("\nExit Diagnospy ? [y/n] : ")
 
                 if a_quit == "y":
-                    print(c("\nGood bye").green)
+                    print("\nGood bye")
                     sys.exit(0)
                 elif a_quit == "n":
-                    print(c("\nReturning to main menu").green)
+                    print("\nReturning to main menu")
                     time.sleep(0.5)
-                    os.system("clear")
+                    os.system('clear' if os.name == 'posix' else 'cls')
                     menu()
                     main()
                 else:
@@ -97,5 +105,5 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print(c("\nExiting program...\n").red)
+        print("\nExiting program...\n")
         sys.exit(0)
